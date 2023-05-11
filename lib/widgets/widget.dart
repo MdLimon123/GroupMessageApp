@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const textInputDecoration = InputDecoration(
   labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w300),
@@ -16,4 +17,20 @@ void nextScreen(context, page) {
 
 void nextScreenReplace(context, page) {
   Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => page));
+}
+
+void showSnackbar(context, color, message) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      message,
+      style: TextStyle(fontSize: 14.sp),
+    ),
+    backgroundColor: color,
+    duration: const Duration(seconds: 2),
+    action: SnackBarAction(
+      label: 'Ok',
+      onPressed: () {},
+      textColor: Colors.white,
+    ),
+  ));
 }
