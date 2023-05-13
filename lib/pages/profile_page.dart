@@ -1,68 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:message_app/helper/helper_funcation.dart';
+import 'package:message_app/pages/home_page.dart';
 import 'package:message_app/pages/login_page.dart';
-import 'package:message_app/pages/profile_page.dart';
-import 'package:message_app/pages/search_page.dart';
 import 'package:message_app/services/auth_service.dart';
 import 'package:message_app/widgets/widget.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ProfilePage extends StatefulWidget {
+  String userName;
+  String email;
+  ProfilePage({super.key, required this.userName, required this.email});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  String email = "";
-  String userName = "";
+class _ProfilePageState extends State<ProfilePage> {
   AuthService _authService = AuthService();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    gettingUserData();
-  }
-
-  gettingUserData() async {
-    await HelperFuncation.getUserEmailFromSF().then((value) {
-      setState(() {
-        email = value!;
-      });
-    });
-
-    await HelperFuncation.getUserNameFromSF().then((value) {
-      setState(() {
-        userName = value!;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0,
         title: Text(
-          'Groups',
+          'Profile',
           style: TextStyle(
-              color: Colors.white,
               fontSize: 27.sp,
-              fontWeight: FontWeight.bold),
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                // navigate to search screen
-                nextScreen(context, SearchPage());
-              },
-              icon: const Icon(Icons.search))
-        ],
+        centerTitle: true,
       ),
       drawer: Drawer(
         child: ListView(
@@ -77,7 +44,7 @@ class _HomePageState extends State<HomePage> {
               height: 15.h,
             ),
             Text(
-              userName,
+              widget.userName,
               style: const TextStyle(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -88,9 +55,9 @@ class _HomePageState extends State<HomePage> {
               height: 2.h,
             ),
             ListTile(
-              onTap: () {},
-              selected: true,
-              selectedColor: Theme.of(context).primaryColor,
+              onTap: () {
+                nextScreenReplace(context, HomePage());
+              },
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
               title: const Text(
@@ -100,13 +67,10 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(Icons.group),
             ),
             ListTile(
+              selected: true,
+              selectedColor: Theme.of(context).primaryColor,
               onTap: () {
-                nextScreenReplace(
-                    context,
-                    ProfilePage(
-                      userName: userName,
-                      email: email,
-                    ));
+                // nextScreenReplace(context, ProfilePage());
               },
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
@@ -157,6 +121,51 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(color: Colors.black),
               ),
               leading: const Icon(Icons.exit_to_app),
+            ),
+          ],
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 80.w, vertical: 150.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.account_circle,
+              size: 150.sp,
+              color: Colors.grey[700],
+            ),
+            SizedBox(
+              height: 15.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Full Name',
+                  style: TextStyle(fontSize: 17.sp),
+                ),
+                Text(
+                  widget.userName,
+                  style: TextStyle(fontSize: 17.sp),
+                )
+              ],
+            ),
+            Divider(
+              height: 30.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Email',
+                  style: TextStyle(fontSize: 17.sp),
+                ),
+                Text(
+                  widget.email,
+                  style: TextStyle(fontSize: 17.sp),
+                )
+              ],
             ),
           ],
         ),
