@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   String userName = "";
   AuthService _authService = AuthService();
   Stream? groups;
+  bool _isLoading = false;
+  String groupName = "";
 
   @override
   void initState() {
@@ -193,12 +195,62 @@ class _HomePageState extends State<HomePage> {
   popUpDialog(BuildContext context) {
     showDialog(
         context: context,
+        barrierDismissible: true,
         builder: (context) {
-          return const AlertDialog(
-            title: Text(
+          return AlertDialog(
+            title: const Text(
               'Create a group',
               textAlign: TextAlign.left,
             ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _isLoading == true
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      )
+                    : TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            groupName = value;
+                          });
+                        },
+                        style: const TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              borderRadius: BorderRadius.circular(20.r),
+                            )),
+                      )
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor),
+                  child: const Text('CANCEL')),
+              ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor),
+                  child: const Text('CREATE')),
+            ],
           );
         });
   }
